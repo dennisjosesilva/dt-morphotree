@@ -9,7 +9,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/debug/bin/dt-morphotree-app",
-      "args": ["${workspaceFolder}/img/leaf1.pgm", "${workspaceFolder}/img-out/leaf1.png"],
+      "args": ["${workspaceFolder}/img/donald.pgm", "${workspaceFolder}/img-out/donald.png"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/debug",
       "environment": [],

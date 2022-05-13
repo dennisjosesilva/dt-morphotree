@@ -1,4 +1,6 @@
 #include "dt-morphotree/DTComputer.hpp"
+#include "dt-morphotree/DTMorphotree.hpp"
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -17,6 +19,7 @@ int main(int argc, char *argv[])
   using morphotree::I32Point;
   using morphotree::UI32Point;
   using morphotree::uint32;
+  using morphotree::uint8;
 
   int width, height, channels;
   unsigned char *data = stbi_load(argv[1], &width, &height,
@@ -26,22 +29,21 @@ int main(int argc, char *argv[])
     static_cast<uint32>(width), 
     static_cast<uint32>(height)});
 
-  std::vector<bool> bimg(domain.numberOfPoints(), true);
+  std::vector<uint8> f(data, data + domain.numberOfPoints());
 
-  for (int i = 0; i < domain.numberOfPoints(); i++) {
-    if (data[i] > 0)
-      bimg[i] = false;
-  }
-  stbi_image_free(data);
+  DTMorphotree dtMorphotree{domain, f};
 
-  std::vector<float> dt = DTComputer().compute(domain, bimg);
-
-  std::vector<unsigned char> out(dt.size(), 0);
-  for (int i = 0; i < domain.numberOfPoints(); ++i) {
-    out[i] = dt[i] * 255;
-  }
-
+  std::vector<uint8> out = dtMorphotree.dtImage(50);
   stbi_write_png(argv[2], width, height, 1, (void*)out.data(), 0);
+
+  std::vector<uint8> nodeImg = dtMorphotree.nodeImage(50);
+  stbi_write_png(argv[3], width, height, 1, (void*)nodeImg.data(), 0);
+
+  std::map<uint8, float> pdt = dtMorphotree.dtPoint(I32Point{186, 412});
+
+  for (std::pair<uint8, float> levelDT : pdt) {
+    std::cout << static_cast<int>(levelDT.first) << ": " << levelDT.second << "\n";
+  }
 
   return 0;
 }
