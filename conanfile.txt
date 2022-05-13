@@ -1,0 +1,7 @@
+[requires]
+morphotree/0.0.1@dennisjosesilva/dev
+glad/0.1.35
+stb/cci.20210910
+
+[generators]
+cmake
