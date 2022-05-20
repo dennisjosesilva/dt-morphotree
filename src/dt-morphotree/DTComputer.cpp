@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include <chrono>
+
 using morphotree::I32Point;
 
 DTComputer::DTComputer()

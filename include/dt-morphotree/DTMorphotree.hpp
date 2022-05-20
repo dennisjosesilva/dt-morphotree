@@ -26,7 +26,7 @@ public:
 
   std::vector<uint8> nodeImage(uint32 nodeIdx) const;
 
-
+  inline uint32 numberOfNodes() const { return tree_.numberOfNodes(); }
 private:
   void init(const std::vector<uint8> &f);
 

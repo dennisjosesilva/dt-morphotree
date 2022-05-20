@@ -18,6 +18,10 @@ file(GLOB_RECURSE PROJECT_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 set(PROJECT_MAIN "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 list(REMOVE_ITEM PROJECT_SOURCE ${PROJECT_MAIN})
 
+set(BF_MAIN "${CMAKE_CURRENT_SOURCE_DIR}/src/bf.cpp")
+list(REMOVE_ITEM PROJECT_SOURCE ${BF_MAIN})
+
+
 add_library(dt-morphotree STATIC ${PROJECT_SOURCE})
 target_link_libraries(dt-morphotree PUBLIC
   ${CONAN_LIBS}
@@ -26,3 +30,6 @@ target_link_libraries(dt-morphotree PUBLIC
 
 add_executable(dt-morphotree-app ${PROJECT_MAIN})
 target_link_libraries(dt-morphotree-app dt-morphotree)
+
+add_executable(bf ${BF_MAIN})
+target_link_libraries(bf dt-morphotree)

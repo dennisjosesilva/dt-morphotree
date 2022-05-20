@@ -6,6 +6,9 @@
 #include <iostream>
 #include <stack>
 
+#include <chrono>
+
+
 DTMorphotree::DTMorphotree(const Box &domain, const std::vector<uint8> &f)
   : domain_{domain},
     tree_{morphotree::MorphoTreeType::MaxTree}
@@ -16,16 +19,23 @@ DTMorphotree::DTMorphotree(const Box &domain, const std::vector<uint8> &f)
 
 void DTMorphotree::init(const std::vector<uint8> &f)
 {
+  using std::chrono::steady_clock;
+  using std::chrono::duration_cast;
+  using std::chrono::milliseconds;
+
+
   using morphotree::buildMaxTree;
   using morphotree::Adjacency8C;
 
+
+  steady_clock::time_point start = steady_clock::now();
   const int L = 256;
 
   DTComputer dtComputer;
   dt_.reserve(L);
   
   for(int l = 0; l < L; l++) {
-    std::cout << "computing DT for level: " << l << "\n";
+    //std::cout << "computing DT for level: " << l << "\n";
     std::vector<bool> bimg(domain_.numberOfPoints(), false);
 
     for (int pidx = 0; pidx < domain_.numberOfPoints(); pidx++)
@@ -33,6 +43,8 @@ void DTMorphotree::init(const std::vector<uint8> &f)
 
     dt_.push_back(dtComputer.compute(domain_, bimg));   
   }
+  steady_clock::time_point end = steady_clock::now();
+  std::cout << "Elapsed time: " << duration_cast<milliseconds>(end-start).count() << " ms\n";
 
   tree_ = buildMaxTree(f, std::make_unique<Adjacency8C>(domain_));
 }
